@@ -1,0 +1,23 @@
+Term Project Timesheet
+
+  Day  |  Time  | Working On:
+-------------------------------------------------------------------------
+11/14  | 3 hrs. | Project proposal, comparative analysis (note:   
+       |        | comparative analysis resources mostly obtained before  
+       |        | start of project), storyboard
+-------------------------------------------------------------------------
+11/15  | 2 hrs. | storyboard
+-------------------------------------------------------------------------
+11/16  | 2 hrs. | switching between modes
+-------------------------------------------------------------------------
+11/17  | 4 hrs. | snake in pygame (technical demonstration)
+-------------------------------------------------------------------------
+11/19  |2.5 hrs.| title screen completed, begin player/enemy classes
+-------------------------------------------------------------------------
+- Deliverable # 1
+-------------------------------------------------------------------------
+11/20  | 5 hrs. | added load screen, added __init__ funct to character 
+       |        | class, fixed general menu navigation
+------------------------------------------------------------------------
+11/22  |3.5 hrs.| expanded map class, built working perlin noise    
+       |        | generator, tested in Tkinter

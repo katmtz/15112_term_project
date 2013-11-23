@@ -3,53 +3,61 @@ File Info:
 
 	Features:
 	- runs title menu
+	- *opens load menu, can select from different "load files"
 
 	This is the modifiable, progress file. 
 
-	If shit gets fucked up, go back to one of the old saves.
-	That's why they're there.
-
-	Never turn this file in for anything ever.
 """
-
 import pygame
 
 def keyPressed(event,data):
 	# wrapper function, calls keyPressed for current mode
-	if (event.key == pygame.K_q):
+	if (event.key == pygame.K_ESCAPE):
 		pygame.quit()
 		data.mode == "Done"
 	# title screen mode
 	if (data.mode == "title"):
 		titleKeyPressed(event,data)
+	elif (data.mode == "story"):
+		storyKeyPressed(event,data)
+	elif (data.mode == "load"):
+		loadKeyPressed(event,data)
 
 def titleKeyPressed(event,data):
 	# handles title mode key presses
 	selections = ["start","load","quit"]
 	i = data.titleIndex# selection index
 	if (event.key == pygame.K_UP):
-		print ">up press"
-		print "initial i:", i
 		i = (i - 1)%3
-		print "changed i:", i 
 		data.titleSelection = selections[i]
 		data.titleIndex = i
-		print "selection",data.titleSelection
 	elif (event.key == pygame.K_DOWN):
-		print ">down press"
-		print "initial i:", i
 		i = (i + 1)%3
-		print "changed i:", i
 		data.titleSelection = selections[i]
 		data.titleIndex = i
-		print data.titleSelection
 	elif (event.key == pygame.K_RETURN):
 		if (data.titleSelection == "start"):
 			data.mode = "story" # run game
 		elif (data.titleSelection == "load"):
-			pass # open load menu
+			data.mode = "load"
 		elif (data.titleSelection == "quit"):
 			pygame.quit() # quit the game
+
+def loadKeyPressed(event,data):
+	if (event.key == pygame.K_BACKSPACE):
+		data.mode = "title"
+	elif (event.key == pygame.K_UP):
+		data.loadSelection = (data.loadSelection - 1)%3
+	elif (event.key == pygame.K_DOWN):
+		data.loadSelection = (data.loadSelection + 1)%3
+	elif (event.key == pygame.K_RETURN):
+		i = data.loadSelection
+		loadedFile = data.saveFiles[i]
+		loadFile(data,loadedFile)
+		
+def storyKeyPressed(event,data):
+	if (event.key == pygame.K_BACKSPACE):
+		data.mode = "title"
 
 def mousePressed(event,data):
 	pass
@@ -64,6 +72,8 @@ def timerFired(data):
 			mousePressed(event,data)
 		elif event.type == pygame.KEYDOWN:
 			keyPressed(event,data)
+	if (data.mode == "story"):
+		data.timer += 1
 
 def redrawAll(data):
 	data.screen.fill(data.colorBlack)
@@ -71,6 +81,10 @@ def redrawAll(data):
 		redrawTitle(data)
 	elif (data.mode == "story"):
 		redrawStory(data)
+	elif (data.mode == "load"):
+		redrawLoad(data)
+	elif (data.mode == "play"):
+		redrawPlay(data) 
 	pygame.display.flip()
 
 def redrawTitle(data):
@@ -101,26 +115,78 @@ def titleHighlight(data):
 def redrawStory(data):
 	data.screen.blit(data.storyBkg, [0,0])
 
+def redrawLoad(data):
+	data.screen.blit(data.loadBkg, [0,0])
+	loadHighlight(data)
+	displayFiles(data)
+
+def loadHighlight(data):
+	selection = data.loadSelection # integer 0-2
+	(listX0,listY0,listX1,listY1) = (40,100,data.width-41,data.height-107)
+	listHeight = listY1 - listY0
+	listWidth = listX1 - listX0
+	entryHeight  = 22 + listHeight/3
+
+	rect = [listX0,listY0 + selection*entryHeight,listWidth,entryHeight]
+	pygame.draw.rect(data.screen,data.hexBBBBAA,rect)
+
+def displayFiles(data):
+	(listX0,listY0,listX1,listY1) = (40,100,data.width-41,data.height-107)
+	listHeight = listY1 - listY0
+	listWidth = listX1 - listX0
+	entryHeight  = 22 + listHeight/3
+
+	files = data.saveFiles # returns a list of filenames
+	if (len(files) > 3):
+		# something's wrong, there should never be more than 3 files
+		print "!!!! MORE THAN 3 FILES !!!!"
+	for i in xrange(len(files)):
+		filename = files[i]
+		msg = "Load file: %s" % filename
+		dispMsg = data.font.render(msg, False, data.colorWhite)
+		position = [listX0 + 10, 10 + listY0 + i*entryHeight]
+		data.screen.blit(dispMsg, position)
+
+def redrawPlay(data):
+	# this will eventually be the game redrawAll function!!
+	data.screen.blit(data.tempPlayCard,[0,0])
+
+def getFiles(data):
+	# eventually will open filesaves, get files, and return their names
+	return ["file one","file two", "file three"]
+
+def loadFile(data,filename):
+	print "%s loaded." % filename
+	data.mode = "play"
+
 def init(data):
 	loadImages(data)
 	loadColors(data)
+
+	data.saveFiles = getFiles(data)
 	data.screenSize = [800,600]
 	data.mode = "title"
 	data.width = data.screenSize[0]
 	data.height = data.screenSize[1]
 	data.font = pygame.font.Font(None, 50)
 	data.titleSelection = None
-	data.titleIndex = 1
+	data.titleIndex = 3
+	data.loadSelection = 0
 
 def loadImages(data):
-	data.storyBkg = pygame.image.load("temp storycard.png")
-	data.titleBkg = pygame.image.load("temp title menu.png")
+	data.imgIcon = pygame.image.load("temp media/icon.png")
+	data.storyBkg = pygame.image.load("temp media/temp storycard.png")
+	data.titleBkg = pygame.image.load("temp media/temp title menu.png")
+	data.loadBkg = pygame.image.load("temp media/load menu.png")
+	# this vv is a place holder for where the game should go???
+	data.tempPlayCard = pygame.image.load("temp media/temp play.png") 
 
 def loadColors(data):
 	data.colorBlack = (0,0,0)
 	data.colorWhite = (255,255,255)
 	data.hexDDDDAA = (221,221,170)
 	data.hexCCBB88 = (204,187,136)
+	data.hexBBBBAA = (187,187,170)
 
 def run():
 	pygame.init()
@@ -131,6 +197,9 @@ def run():
 	init(data)
 
 	data.screen = pygame.display.set_mode(data.screenSize)
+	pygame.display.set_caption("im gonna think of a name for this eventually")
+	pygame.display.set_icon(data.imgIcon)
+
 	timerFired(data)
 
 	while True:

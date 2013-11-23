@@ -22,22 +22,11 @@ from Character import Character
 
 class Player(Character):
 	# define attributes in init
-	def __init__(self):
-		self.maxHealth = 100.0
-		self.health = 100.0
-		self.allItems = []
-		self.defensiveItems = []
-		self.offensiveItems = []
-		self.keyItems = []
-		self.attacks = []
-		self.offensiveAttacks = []
-		self.defensiveAttacks = []
-		self.attackMult = 1.0
-		self.defenseMult = 1.0
-		self.level = 1
-		self.location = (0,0) # not sure how to define this right now???
-		self.status = "healthy"
-		super(Player,self).__init__()
+	def __init__(self,data,image,location):
+		
+		# if other variables needed??
+
+		super(Player,self).__init__(data,image,location)
 
 	def pickUpItem(self,location):
 		# adds item from location to inventory if there's an item

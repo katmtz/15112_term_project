@@ -72,8 +72,6 @@ def timerFired(data):
 			mousePressed(event,data)
 		elif event.type == pygame.KEYDOWN:
 			keyPressed(event,data)
-	if (data.mode == "story"):
-		data.timer += 1
 
 def redrawAll(data):
 	data.screen.fill(data.colorBlack)

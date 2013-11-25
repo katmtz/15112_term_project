@@ -1,9 +1,15 @@
 """
 File Info:
-	**noise functions adapted from pseudocode by Hugo Elias**
+	
+	Creates a text based map file that can be downloaded and parsed
+	to generate tile & map objects.
 
-	Features:
-	- can generate a 
+	Process:
+	- generates a 2D list map from an empty list, ==>
+	- converts different values to string characters, ==>
+	- converts 2D list to a single string, ==>
+	- writes map string to a file
+
 """
 
 import random
@@ -36,7 +42,7 @@ def interpolate(a, b, x):
 
 def noise(x,y):
 	# primary random noise function
-	n = x + y*57
+	n = x + y *57
 	n = (n<<13) ^ n
 	return (1.0 - ( (n* (n**2 * 15731 + 789221) + 1376312589) 
 		& 0x7fffffff) / 1073741824.0)
@@ -89,55 +95,42 @@ def makeSomeNoise(emptyMap):
 	for row in xrange(rows):
 		for col in xrange(cols):
 			(x,y) = getInts(5)
-			offset = x
+			offset = -x
 			tile = perlin2DNoise(row,col,persistence,n)
 			emptyMap[row][col] = tile*offset
 	return emptyMap
 
+############################################################
+# List to string conversion
+############################################################
 
-#########################################################################
-# graphical test of perlin noise
-#########################################################################
+def mapOutput(dimension):
 
-def createTexture(noiseMap):
-	# init
-	(rows,cols) = (len(noiseMap),len(noiseMap[0]))
-	root = Tk()
-	squareSize = 10
-	cWidth = squareSize*cols
-	cHeight  = squareSize*rows
-	canvas = Canvas(root,width=cWidth,height=cHeight)
-	canvas.pack()
+	 emptyMap = createMap(dimension)
+	 noisyMap = makeSomeNoise(emptyMap)
+	 # noisy map is a 2D list of values from ~-5 to 2
 
-	# draw
-	for row in xrange(rows):
-		for col in xrange(cols):
-			color = getColor(noiseMap,row,col)
-			color = '#%s' %color
-			x0,y0 = col*squareSize,row*squareSize
-			x1,y1 = x0 + squareSize,y0 + squareSize
-			canvas.create_rectangle(x0,y0,x1,y1, fill = color)
+	 def getTypeStr(noisyMap):
+	 	(rows,cols) = (len(noisyMap),len(noisyMap[0]))
+	 	for row in xrange(rows):
+	 		for col in xrange(cols):
+ 	 			value = noisyMap[row][col]
+				if (value > 1):
+					# blocking type
+					typeStr = "!"
+				elif (value < 1 and value > .5):
+					# blocking type 2
+					typeStr = "#"
+				elif (value < .5 and value >= 0):
+					# ground type 3
+					typeStr = "."
+				elif (value < 0 and value > -1):
+					# ground type 2
+					typeStr = "-"
+				else:
+					# ground type 1
+					typeStr = "+"
+				noisyMap[row][col] = typeStr
+		
 
-	# launch app
-	root.title("perlin noise!")
-	root.mainloop()
-
-def getColor(noiseMap,row,col):
-	value = noiseMap[row][col]
-	if (value > 1):
-		color = 'bb9977'
-	elif (value < 1 and value > .5):
-		color = '998877'
-	elif (value < .5 and value >= 0):
-		color = '887766'
-	elif (value < 0 and value > -1):
-		color = '997766'
-	else:
-		color = 'ccbb88'
-	return color
-
-emptyMap = createMap(80)
-noisyMap = makeSomeNoise(emptyMap)
-print noisyMap
-createTexture(noisyMap)
-
+	 

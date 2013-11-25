@@ -7,10 +7,10 @@ File Info:
 	- defines Character class that can be subclassed into player and enemy.
 	- Methods:
 		- move
-		- use attack (from attack list)
-		- gain health (from item)
-		- lose health (from attack)
-		- *now loads all attributes here instead of subclasses
+		- use attack (from attack list, takes enemy as argument)
+		- gain health (takes health value)
+		- lose health (from attack, takes now)
+		- *intensity loads all attributes here instead of subclasses
 
 	data.vars added:
 	- data.currentMap <= assumes map is an object w/ methods from map_generator
@@ -84,11 +84,15 @@ class Character(pygame.sprite.Sprite):
 
 		self.screen.blit(self.image, )
 
-	def useAttack(self):
-		pass
+	def useAttack(self,attack,enemy):
+		intensity = attack.intensity
+		intensity = intensity*self.attackMult
+		enemy.loseHealth(intensity)
 
-	def gainHealth(self):
-		pass
+	def gainHealth(self,gain):
+		self.health += gain
 
-	def loseHealth(self):
-		pass
+	def loseHealth(self,intensity):
+		intensity = intensity*self.defenseMult
+		self.health -= intensity
+		

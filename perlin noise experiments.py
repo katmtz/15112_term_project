@@ -138,6 +138,5 @@ def getColor(noiseMap,row,col):
 
 emptyMap = createMap(80)
 noisyMap = makeSomeNoise(emptyMap)
-print noisyMap
 createTexture(noisyMap)
 

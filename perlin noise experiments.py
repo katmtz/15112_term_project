@@ -3,7 +3,8 @@ File Info:
 	**noise functions adapted from pseudocode by Hugo Elias**
 
 	Features:
-	- can generate a 
+	- can generate a basic demonstration of how tile distribution will look on a larger
+	map. (uses Tkinter)
 """
 
 import random

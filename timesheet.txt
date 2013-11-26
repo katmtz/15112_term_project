@@ -14,10 +14,15 @@ Term Project Timesheet
 -------------------------------------------------------------------------
 11/19  |2.5 hrs.| title screen completed, begin player/enemy classes
 -------------------------------------------------------------------------
-- Deliverable # 1
+----                      Deliverable # 1                            ----
 -------------------------------------------------------------------------
 11/20  | 5 hrs. | added load screen, added __init__ funct to character 
        |        | class, fixed general menu navigation
 ------------------------------------------------------------------------
 11/22  |3.5 hrs.| expanded map class, built working perlin noise    
        |        | generator, tested in Tkinter
+------------------------------------------------------------------------
+11/24  | 5 hrs. | planned map file input/output, built functions to 
+       |        | convert noise data into different tiles, set aside 
+       |        | audio files for inclusion in game 
+       

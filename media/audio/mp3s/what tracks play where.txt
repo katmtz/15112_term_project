@@ -1,0 +1,7 @@
+Track Name               | Location in Game
+----------------------------------------------------------------
+crystal cave             | beginning story cards
+ruinous laments          | normal exploration
+soft breeze              | menus (title, load, save, item)
+without                  | end story card
+crystamanthequins        | battle music!!!!

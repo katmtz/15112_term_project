@@ -1,84 +1,71 @@
 """
-File Info: 
-	
-	**DON'T TURN THIS IN!!**
+File Info:
 
-	Features:
-	- player subclass of Character
-	- sets player attributes
-	- Methods:
-		- pick up item (from location) <--hazy location description
-		- place item (to location) <--hazy location description
-		- learn attack
-		- level up
-		- reset to last save (if "died") <-- not written
-		- [eventual AI attack??? or should this be in character class]
+	Creates Player subclass of Entity.
 
-	This file is modifiable.
+	This is the user controlled sprite.
 
+	Functions:
+	- updates rect
+	- checks for collisions with walls
+	- bounds movement to just the map
+
+	(add functions for item handling, health, attacks later)
 """
 
-from Character import Character
+import pygame, Entity
 
-class Player(Character):
-	# define attributes in init
-	def __init__(self,data,image,location):
-		
-		# if other variables needed??
+class Player(Entity):
+	def __init__(self,x,y):
 
-		super(Player,self).__init__(data,image,location)
+		# image and rect load
+		self.image = pygame.image.load("temp media/temp player sprite.png").convert()
+		self.imageRect = self.image.get_rect()
+		(self.imageRectX,self.imageRectY) = self.imageRect.topleft
 
-	def pickUpItem(self,location):
-		# adds item from location to inventory if there's an item
-		def itemInLocation(location):
-			# not sure how to find location's type rn???
-			if (location == "item"):
-				return True
-			return False
+		# movement constant
+		self.velocity = 25
 
-		# add item to list of all items and to type-specific lists 
-		if (itemInLocation(location)):
-			item = tile.getItem()
-			allItems.append(item)
-			if (item.getType() == "defensive"):
-				defensiveItems.append(item)
-			elif (item.getType() == "offensive"):
-				offensiveItems.append(item)
-			elif (item.getType() == "key"):
-				keyItems.append(item)
-			return True
-		# returns False if no item
-		return False
+		# directions
+		self.movingUp = False
+		self.movingDown = False
+		self.movingLeft = False
+		self.movingRight = False
 
-	def placeItem(self,location):
-		# this function probably is gonna need lots of work
-		def locationClear(location):
-			# check if the tile can accept an item
-			if location not in ["wall","item"]:
-				return True
-			return False
+	def update(self, up, down, left, right):
+		self.velocity = 25
 
-		# place item
-		location =  "item"
+		# gets information from keyPressed
+		self.movingUp = up
+		self.movingDown = down
+		self.movingLeft = left
+		self.movingRight = right
 
-	def learnAttack(self,attack):
-		# adds attack to available attacks
-		self.attacks.append(attack)
-		if (attack.getType() == "offensive"):
-			self.offensiveAttacks.append(attack)
-		else:
-			self.defensiveAttacks.append(attack)
+		# changes rect in response to keyPressed
+		if (self.movingUp):
+			self.imageRect.topleft = (self.imageRectX, self.imageRectY-self.velocity)
+		elif (self.movingDown):
+			self.imageRect.topleft = (self.imageRectX, self.imageRectY+self.velocity)
+		elif (self.movingLeft):
+			self.imageRect.topleft = (self.imageRectX-self.velocity,self.imageRectY)
+		elif (self.movingRight):
+			self.imageRect.topleft = (self.imageRectX+self.velocity,self.imageRectY)
+		self.boundMovement()
 
+	def collide(self,walls):
+		for wall in walls:
+			if pygame.self.collide_rect(self,wall):
+				self.velocity = 0
 
-	def levelUp(self):
-		# increases players defense/offense multipliers + max health
-		if (self.attackMult < 4):
-			self.attackMult += .25
-		if (self.defenseMult > .5):
-			self.defenseMult -= .1
-		self.maxHealth += 10
+	def boundMovement(self):
+		leftEdge,topEdge,width,height = self.imageRect
+		if (leftEdge <= 0):
+			leftEdge = 0
+		elif (leftEdge >= 2000 - width):
+			leftEdge = 2000 - width
+		if (topEdge <= 0):
+			topEdge = 0
+		elif (topEdge >= 2000 - width):
+			topEdge = 2000 - width
+		self.imageRect = leftEdge,topEdge,width,height
 
-	def reset(self):
-		# will return to this function when i determine how to access 
-		# save states???
-		pass

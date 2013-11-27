@@ -8,7 +8,13 @@ File Info:
 	This is the modifiable, progress file. 
 
 """
-import pygame, mapOutput, Camera, Tile, Map, Player, Enemy
+import pygame
+from mapOutput import *
+from Camera import *
+from Tile import * 
+from Map import Map
+from Player import Player
+from Enemy import Enemy
 
 ###########################################################
 # Event Handling
@@ -66,13 +72,13 @@ def storyKeyPressed(event,data):
 	# story card key presses
 	if (event.key == pygame.K_BACKSPACE):
 		data.mode = "title"
-	while (data.current != 4):
-		if (event.key == pygame.K_RETURN):
-			panelCounter += 1
-			data.currentPanel += 1
-	if (data.currentPanel == 4):
-		initMap(data) # loads map file
-		data.mode = "play"
+	elif (event.key == pygame.K_RETURN and data.currentPanel <= 5): # move through story cards
+		data.currentPanel += 1
+		if (data.currentPanel == 4):
+			data.map = Map()
+			data.tiles = data.map.getTiles()
+			data.mode = "game"
+
 
 def gameKeyPressed(event,data):
 	# updates player while in game
@@ -118,7 +124,7 @@ def redrawAll(data):
 		redrawStory(data)
 	elif (data.mode == "load"):
 		redrawLoad(data)
-	elif (data.mode == "play"):
+	elif (data.mode == "game"):
 		redrawGame(data) 
 	pygame.display.flip()
 
@@ -154,9 +160,9 @@ def redrawStory(data):
 	if (data.currentPanel == 1):
 		data.screen.blit(data.storyBkg, [0,0])
 	elif (data.currentPanel == 2):
-		pass
+		data.screen.fill(data.colorWhite)
 	elif (data.currentPanel == 3):
-		pass
+		data.screen.fill(data.colorBlack)
 	# game running
 	elif (data.currentPanel == 4):
 		pass
@@ -202,7 +208,16 @@ def displayFiles(data):
 		data.screen.blit(dispMsg, position)
 
 def redrawGame(data):
-	pass
+	# draw map tiles
+	for row in xrange(data.map.mapDim):
+		for col in xrange(data.map.mapDim):
+			(x,y) = (row*data.map.tileY,col*data.map.tileX)
+			currTile = data.tiles[(x,y)]
+			data.screen.blit(currTile.image, (x,y))
+	data.screen.blit(data.player.image, data.camera.apply(data.player))
+
+
+
 
 ###########################################################
 # Data Loading/Management
@@ -249,10 +264,6 @@ def loadColors(data):
 	data.hexDDDDAA = (221,221,170)
 	data.hexCCBB88 = (204,187,136)
 	data.hexBBBBAA = (187,187,170)
-
-def initMap(data):
-	gameMap = Map()
-	gameMap.generate()
 
 ###########################################################
 # Run Game

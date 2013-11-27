@@ -12,16 +12,16 @@ File Info:
 
 	(add functions for item handling, health, attacks later)
 """
-
-import Entity
+import pygame
+from Entity import Entity
 
 class Player(Entity):
 	def __init__(self):
 
 		# image and rect load
-		self.image = pygame.image.load("temp media/temp player sprite.png").convert()
-		self.imageRect = self.image.get_rect()
-		(self.imageRectX,self.imageRectY) = self.imageRect.topleft
+		self.image = pygame.image.load("temp media/temp player sprite.png")#.convert_alpha()
+		self.rect = self.image.get_rect()
+		(self.imageRectX,self.imageRectY) = self.rect.topleft
 
 		# movement constant
 		self.velocity = 25
@@ -31,7 +31,7 @@ class Player(Entity):
 		self.movingDown = False
 		self.movingLeft = False
 		self.movingRight = False
-		super(Player,self).__init__(None)
+		super(Player,self).__init__()
 
 	def update(self, up, down, left, right):
 		# updates sprite according to key presses

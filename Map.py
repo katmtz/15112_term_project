@@ -5,7 +5,9 @@ File Info:
 
 """
 
-import pygame, Tile
+import pygame
+from mapOutput import *
+from Tile import MapTile,BlockingTile1,BlockingTile2,GroundTile1,GroundTile2,GroundTile3
 
 class Map(object):
 
@@ -19,10 +21,9 @@ class Map(object):
         #self.atBottom = False
         #self.horizScroll = False   
         #self.vertScroll = False
-        self.mapDim = 20
+        self.mapDim = 40
         #controls the speed the sprite walks around.
         self.scrollSpeed = 2
-        self.mapSurface = pygame.Surface(self.mapDim*50,self.mapDim*)
 
         # sets tile size
         self.tileSize = (50,50)
@@ -35,84 +36,44 @@ class Map(object):
         self.mapWidth = self.mapDim*self.tileSize[0]
         self.mapHeight = self.mapDim*self.tileSize[1]
 
-        # create map surface
-        self.mapSurface = pygame.Surface(self.mapDim*self.tileX,self.mapDim*self.tileY)
-"""
-
-**not currently using this code**
-
-        self.leftEdge = 0
-        self.rightEdge = self.mapWidth - self.camera.w
-        self.topEdge = 0
-        self.bottomEdge = self.mapHeight - self.camera.w
-
-    def boundsCheck(self):
-        if (self.camera.x <= 0):
-            self.atLeft = True
-            self.camera.x = 0
-        else:
-            self.atLeft = False
-
-        if (self.camera.y <= 0):
-            self.atTop = True
-            self.camera.y = 0
-        else:
-            self.atTop = False
-
-        if (self.camera.x + self.camera.w >= self.rightEdge):
-            self.atRight = True
-            self.camera.x = self.rightEdge
-        else:
-            self.atRight = False
-
-        if (self.camera.y + self.camera.h >= self.bottomEdge):
-            self.atBottom = True
-            self.camera.y = self.bottomEdge
-        else:
-            self.atBottom = False
-"""
     def getTiles(self):
     	# sets tiles to specific locations and types based on their
     	# location in the map string and the character representing
     	# that tile
         for i in xrange(len(self.mapStr)):
             char = self.mapStr[i]
-            (x,y) = self.getLocation(i)
+            (x,y) = self.getLocationFromIndex(i)
             if (char == '#'):
-                tile = BlockingTile1(self.blockTile1,x,y)
+                currTile = BlockingTile1(x,y)
 
             elif (char == "!"):
-                tile = BlockingTile2(self.blockTile2,x,y)
+                currTile = BlockingTile2(x,y)
 
             elif (char == "."):
-                tile = GroundTile3(self.groundTile3,x,y)
+                currTile = GroundTile3(x,y)
 
             elif (char == "-"):
-                tile = GroundTile2(self.groundTile2,x,y)
+                currTile = GroundTile2(x,y)
 
             elif (char == '+'):
-                tile = GroundTile1(self.GroundTile1,x,y)
+                currTile = GroundTile1(x,y)
 
             if (char != "\n"):
-            	self.tiles[(x,y)] = tile
+            	self.tiles[(x,y)] = currTile
         return self.tiles
 
-    def getLocation(self,index):
+    def getLocationFromIndex(self,index):
     	# uses string index to find position on map
     	row = index/(self.mapDim + 1)
     	col = index%(self.mapDim + 1)
-    	(x,y) = (row*self.tileX, col*self.tileY)
+    	(x,y) = (col*self.tileX,row*self.tileY)
     	return (x,y)
 
     def generate(self,screen):
     	# generate a full map
-
-    	# populate tile dict
-    	self.getTiles()
-
-    	# draw to 
+    	# draw to screen
     	for row in xrange(self.mapDim):
     		for col in xrange(self.mapDim):
-    			(x,y) = (row*self.tileX, col*self.tileY)
+    			(x,y) = (col*self.tileX,row*self.tileY)
     			tile = self.tiles[(x,y)]
     			screen.blit(tile.image,(x,y))

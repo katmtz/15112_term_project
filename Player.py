@@ -13,10 +13,10 @@ File Info:
 	(add functions for item handling, health, attacks later)
 """
 
-import pygame, Entity
+import Entity
 
 class Player(Entity):
-	def __init__(self,x,y):
+	def __init__(self):
 
 		# image and rect load
 		self.image = pygame.image.load("temp media/temp player sprite.png").convert()
@@ -31,17 +31,19 @@ class Player(Entity):
 		self.movingDown = False
 		self.movingLeft = False
 		self.movingRight = False
+		super(Player,self).__init__(None)
 
 	def update(self, up, down, left, right):
+		# updates sprite according to key presses
 		self.velocity = 25
 
-		# gets information from keyPressed
+		# these are all boolean values
 		self.movingUp = up
 		self.movingDown = down
 		self.movingLeft = left
 		self.movingRight = right
 
-		# changes rect in response to keyPressed
+		# changes rect in response to key presses
 		if (self.movingUp):
 			self.imageRect.topleft = (self.imageRectX, self.imageRectY-self.velocity)
 		elif (self.movingDown):
@@ -53,11 +55,13 @@ class Player(Entity):
 		self.boundMovement()
 
 	def collide(self,walls):
+		# checks for collisions with blocking tiles
 		for wall in walls:
 			if pygame.self.collide_rect(self,wall):
 				self.velocity = 0
 
 	def boundMovement(self):
+		# keeps the sprite from walking off the map
 		leftEdge,topEdge,width,height = self.imageRect
 		if (leftEdge <= 0):
 			leftEdge = 0

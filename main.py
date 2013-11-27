@@ -8,7 +8,11 @@ File Info:
 	This is the modifiable, progress file. 
 
 """
-import pygame, mapOutput, mapsAndTiles, Camera
+import pygame, mapOutput, Camera, Tile, Map, Player, Enemy
+
+###########################################################
+# Event Handling
+###########################################################
 
 def keyPressed(event,data):
 	# wrapper function, calls keyPressed for current mode
@@ -27,6 +31,8 @@ def titleKeyPressed(event,data):
 	# handles title mode key presses
 	selections = ["start","load","quit"]
 	i = data.titleIndex# selection index
+
+	# key presses iterate through a list of possible menu selections
 	if (event.key == pygame.K_UP):
 		i = (i - 1)%3
 		data.titleSelection = selections[i]
@@ -44,6 +50,7 @@ def titleKeyPressed(event,data):
 			pygame.quit() # quit the game
 
 def loadKeyPressed(event,data):
+	# load file menu key presses
 	if (event.key == pygame.K_BACKSPACE):
 		data.mode = "title"
 	elif (event.key == pygame.K_UP):
@@ -56,6 +63,7 @@ def loadKeyPressed(event,data):
 		loadFile(data,loadedFile)
 		
 def storyKeyPressed(event,data):
+	# story card key presses
 	if (event.key == pygame.K_BACKSPACE):
 		data.mode = "title"
 	while (data.current != 4):
@@ -67,6 +75,7 @@ def storyKeyPressed(event,data):
 		data.mode = "play"
 
 def gameKeyPressed(event,data):
+	# updates player while in game
 	if (event.key == pygame.K_UP):
 		data.player.update(True,False,False,False)
 
@@ -78,7 +87,13 @@ def gameKeyPressed(event,data):
 
 	elif (event.key == pygame.K_RIGHT):
 		data.player.update(False,False,False,True)
-	player.collide(blockingTiles)
+
+	# check for collisions with blocking tiles
+	data.player.collide(data.blockingTiles)
+
+	# updates camera view
+	data.camera.update()
+	data.camera.apply()
 
 def timerFired(data):
 	redrawAll(data)
@@ -90,7 +105,12 @@ def timerFired(data):
 		elif event.type == pygame.KEYDOWN:
 			keyPressed(event,data)
 
+###########################################################
+# Draw Functions
+###########################################################
+
 def redrawAll(data):
+	# redrawAll wrapper function
 	data.screen.fill(data.colorBlack)
 	if (data.mode == "title"):
 		redrawTitle(data)
@@ -128,6 +148,8 @@ def titleHighlight(data):
 		data.width/3,55]) # highlight quit 
 
 def redrawStory(data):
+	# draws the story cards
+
 	# intro panels
 	if (data.currentPanel == 1):
 		data.screen.blit(data.storyBkg, [0,0])
@@ -145,11 +167,13 @@ def redrawStory(data):
 		data.screen.fill(data.colorBlack)
 
 def redrawLoad(data):
+	# draws the file loading menu
 	data.screen.blit(data.loadBkg, [0,0])
 	loadHighlight(data)
 	displayFiles(data)
 
 def loadHighlight(data):
+	# highlights the current selection in the load menu
 	selection = data.loadSelection # integer 0-2
 	(listX0,listY0,listX1,listY1) = (40,100,data.width-41,data.height-107)
 	listHeight = listY1 - listY0
@@ -160,6 +184,7 @@ def loadHighlight(data):
 	pygame.draw.rect(data.screen,data.hexBBBBAA,rect)
 
 def displayFiles(data):
+	# shows a list of all saved files
 	(listX0,listY0,listX1,listY1) = (40,100,data.width-41,data.height-107)
 	listHeight = listY1 - listY0
 	listWidth = listX1 - listX0
@@ -177,14 +202,18 @@ def displayFiles(data):
 		data.screen.blit(dispMsg, position)
 
 def redrawGame(data):
-	# this will eventually be the game redrawAll function!!
-	data.screen.blit(data.tempPlayCard,[0,0])
+	pass
+
+###########################################################
+# Data Loading/Management
+###########################################################
 
 def getFiles(data):
 	# eventually will open filesaves, get files, and return their names
 	return ["file one","file two", "file three"]
 
 def loadFile(data,filename):
+	# placeholder function for when I have eventual saved data
 	print "%s loaded." % filename
 	data.mode = "play"
 
@@ -198,19 +227,20 @@ def init(data):
 	data.width = data.screenSize[0]
 	data.height = data.screenSize[1]
 	data.font = pygame.font.Font(None, 50)
+	data.mapDim = 2000 # map is square, don't need rows and cols
 	data.titleSelection = None
 	data.titleIndex = 3
 	data.loadSelection = 0
 	data.currentPanel = 1
-	data.player = Player(32,32)
-	data.camera = Camera(complexCamera, 2000,2000) # 2000x2000 is map dimensions
+	data.player = Player()
+	data.camera = Camera(complexCamera, data.mapDim, data.mapDim)
 
 def loadImages(data):
 	data.imgIcon = pygame.image.load("temp media/icon.png")
 	data.storyBkg = pygame.image.load("temp media/temp storycard.png")
 	data.titleBkg = pygame.image.load("temp media/temp title menu.png")
 	data.loadBkg = pygame.image.load("temp media/load menu.png")
-	# this vv is a place holder for where the game should go???
+	# this vv is a place holder for where the game should g0
 	data.tempPlayCard = pygame.image.load("temp media/temp play.png") 
 
 def loadColors(data):
@@ -221,7 +251,12 @@ def loadColors(data):
 	data.hexBBBBAA = (187,187,170)
 
 def initMap(data):
-	map = Map()
+	gameMap = Map()
+	gameMap.generate()
+
+###########################################################
+# Run Game
+###########################################################
 
 def run():
 	pygame.init()

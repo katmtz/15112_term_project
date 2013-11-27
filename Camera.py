@@ -11,7 +11,7 @@ import pygame
 class Camera(object):
     def __init__(self, cameraFunct, width, height):
         self.cameraFunct = cameraFunct
-        self.state = Rect(0,0,width,height)
+        self.state = pygame.Rect(0,0,width,height)
         
     def apply(self,target):
         return target.rect.move(self.state.topleft)
@@ -32,4 +32,4 @@ def complexCamera(cameraRect, targetRect):
     else:
     	top = tTop
 
-    return Rect(left, top, cWidth, cHeight)
+    return pygame.Rect(left, top, cWidth, cHeight)

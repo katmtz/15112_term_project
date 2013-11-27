@@ -19,7 +19,7 @@ class Player(Entity):
 	def __init__(self):
 
 		# image and rect load
-		self.image = pygame.image.load("temp media/temp player sprite.png")#.convert_alpha()
+		self.image = pygame.image.load("media/sprites/playerright.png")#.convert_alpha()
 		self.rect = self.image.get_rect()
 		(self.imageRectX,self.imageRectY) = self.rect.topleft
 
@@ -33,7 +33,7 @@ class Player(Entity):
 		self.movingRight = False
 		super(Player,self).__init__()
 
-	def update(self, up, down, left, right):
+	def update(self, up, down, left, right,walls):
 		# updates sprite according to key presses
 		self.velocity = 25
 
@@ -45,24 +45,25 @@ class Player(Entity):
 
 		# changes rect in response to key presses
 		if (self.movingUp):
-			self.imageRect.topleft = (self.imageRectX, self.imageRectY-self.velocity)
+			self.rect.topleft = (self.imageRectX, self.imageRectY-self.velocity)
 		elif (self.movingDown):
-			self.imageRect.topleft = (self.imageRectX, self.imageRectY+self.velocity)
+			self.rect.topleft = (self.imageRectX, self.imageRectY+self.velocity)
 		elif (self.movingLeft):
-			self.imageRect.topleft = (self.imageRectX-self.velocity,self.imageRectY)
+			self.rect.topleft = (self.imageRectX-self.velocity,self.imageRectY)
 		elif (self.movingRight):
-			self.imageRect.topleft = (self.imageRectX+self.velocity,self.imageRectY)
+			self.rect.topleft = (self.imageRectX+self.velocity,self.imageRectY)
 		self.boundMovement()
+		self.collide(walls)
 
 	def collide(self,walls):
 		# checks for collisions with blocking tiles
 		for wall in walls:
-			if pygame.self.collide_rect(self,wall):
+			if pygame.sprite.collide_rect(self,wall):
 				self.velocity = 0
 
 	def boundMovement(self):
 		# keeps the sprite from walking off the map
-		leftEdge,topEdge,width,height = self.imageRect
+		leftEdge,topEdge,width,height = self.rect
 		if (leftEdge <= 0):
 			leftEdge = 0
 		elif (leftEdge >= 2000 - width):
@@ -71,5 +72,5 @@ class Player(Entity):
 			topEdge = 0
 		elif (topEdge >= 2000 - width):
 			topEdge = 2000 - width
-		self.imageRect = leftEdge,topEdge,width,height
+		self.rect.topleft = leftEdge,topEdge
 

@@ -43,7 +43,9 @@ class Map(object):
         for i in xrange(len(self.mapStr)):
             char = self.mapStr[i]
             (x,y) = self.getLocationFromIndex(i)
-            if (char == '#'):
+            if (i == 0 or i == 1):
+                currTile = GroundTile3(x,y)
+            elif (char == '#'):
                 currTile = BlockingTile1(x,y)
 
             elif (char == "!"):

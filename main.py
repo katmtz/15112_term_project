@@ -3,6 +3,8 @@ File Info:
 
 	Features:
 	- runs title menu
+	- shows game's story introduction
+	- loads and displays map
 	- *opens load menu, can select from different "load files"
 
 	This is the modifiable, progress file. 
@@ -32,6 +34,8 @@ def keyPressed(event,data):
 		storyKeyPressed(event,data)
 	elif (data.mode == "load"):
 		loadKeyPressed(event,data)
+	elif (data.mode == "game"):
+		gameKeyPressed(event,data)
 
 def titleKeyPressed(event,data):
 	# handles title mode key presses
@@ -74,32 +78,38 @@ def storyKeyPressed(event,data):
 		data.mode = "title"
 	elif (event.key == pygame.K_RETURN and data.currentPanel <= 5): # move through story cards
 		data.currentPanel += 1
-		if (data.currentPanel == 4):
+		if (data.currentPanel == 2):
 			data.map = Map()
 			data.tiles = data.map.getTiles()
+		elif (data.currentPanel == 3):
+			for key in data.tiles:
+				tile = data.tiles[key]
+				if (tile.blocking):
+					data.blockingTiles.append(tile)
+		elif (data.currentPanel == 4):
 			data.mode = "game"
 
 
 def gameKeyPressed(event,data):
 	# updates player while in game
 	if (event.key == pygame.K_UP):
-		data.player.update(True,False,False,False)
+		data.player.update(True,False,False,False,data.blockingTiles)
 
 	elif (event.key == pygame.K_DOWN):
-		data.player.update(False,True,False,False)
+		data.player.update(False,True,False,False,data.blockingTiles)
 
 	elif (event.key == pygame.K_LEFT):
-		data.player.update(False,False,True,False)
+		data.player.update(False,False,True,False,data.blockingTiles)
 
 	elif (event.key == pygame.K_RIGHT):
-		data.player.update(False,False,False,True)
+		data.player.update(False,False,False,True,data.blockingTiles)
 
 	# check for collisions with blocking tiles
 	data.player.collide(data.blockingTiles)
 
 	# updates camera view
-	data.camera.update()
-	data.camera.apply()
+	data.camera.update(data.player)
+	data.camera.apply(data.player)
 
 def timerFired(data):
 	redrawAll(data)
@@ -158,11 +168,11 @@ def redrawStory(data):
 
 	# intro panels
 	if (data.currentPanel == 1):
-		data.screen.blit(data.storyBkg, [0,0])
+		data.screen.blit(data.storycard1, [0,0])
 	elif (data.currentPanel == 2):
-		data.screen.fill(data.colorWhite)
+		data.screen.blit(data.storycard2, [0,0])
 	elif (data.currentPanel == 3):
-		data.screen.fill(data.colorBlack)
+		data.screen.blit(data.storycard3, [0,0])
 	# game running
 	elif (data.currentPanel == 4):
 		pass
@@ -247,12 +257,15 @@ def init(data):
 	data.titleIndex = 3
 	data.loadSelection = 0
 	data.currentPanel = 1
+	data.blockingTiles = []
 	data.player = Player()
 	data.camera = Camera(complexCamera, data.mapDim, data.mapDim)
 
 def loadImages(data):
 	data.imgIcon = pygame.image.load("temp media/icon.png")
-	data.storyBkg = pygame.image.load("temp media/temp storycard.png")
+	data.storycard1 = pygame.image.load("media/storycard1.png")
+	data.storycard2 = pygame.image.load("media/storycard2.png")
+	data.storycard3 = pygame.image.load("media/storycard3.png")
 	data.titleBkg = pygame.image.load("temp media/temp title menu.png")
 	data.loadBkg = pygame.image.load("temp media/load menu.png")
 	# this vv is a place holder for where the game should g0

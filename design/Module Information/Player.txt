@@ -1,0 +1,18 @@
+The Player class holds the player's image, current movement 
+direction, speed, and health.
+
+player.update(up,down,left,right) takes 4 boolean arguments
+that are determined in the keyPressed function in main.py. 
+It sets the movement flags, then checks player bounds,
+lowers health if the player is on a "bad" tile, and adjusts 
+the player's rect in response to the movement flags.
+
+player.checkBounds() checks to see if the player is not on
+the board, and if it isn't, it adjusts the player's rect so
+it is.
+
+player.collide(walls) checks if the player is currently on 
+a "bad" tile, and if it is, it lowers the player's health.
+
+player.hasHealth() is a simple test to determine whether 
+the player has run out of health.

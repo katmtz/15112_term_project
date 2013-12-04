@@ -1,0 +1,17 @@
+The Map class holds a dictionary of references to each tile by topleft 
+coordinates. It uses functions defined in MapOutput in __init__ to
+create a temporary map file, then loads that file.
+
+The main work is done in Map.getTiles(), because this iterates through
+the map file's string, checking each placeholder symbol and deciding
+which type of tile to assign to every row/col location. 
+
+Map.GetLocationFromIndex(index) takes an index int (from getTiles()) 
+and calculates what location (in rows and cols) that index corresponds 
+to on the larger board. It returns a tuple of (x,y) coordinates.
+
+getTiles() creates a dictionary, using the coordinates as keys and
+the tile object as values. When it has iterated through the entire
+file, it returns the dictionary.
+
+Map.generate(screen) draws the map to the screen and is called only once.

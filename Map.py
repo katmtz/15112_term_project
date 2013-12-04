@@ -7,23 +7,13 @@ File Info:
 
 import pygame
 from mapOutput import *
-from Tile import MapTile,BlockingTile1,BlockingTile2,GroundTile1,GroundTile2,GroundTile3
+from Tile import *
 
 class Map(object):
 
     def __init__(self):
-        self.scrollDir = None
         self.tiles = {}
-        #self.camera = pygame.Rect((0, 0),resolution)        
-        #self.atTop = False
-        #self.atRight = False     
-        #self.atLeft = False
-        #self.atBottom = False
-        #self.horizScroll = False   
-        #self.vertScroll = False
         self.mapDim = 40
-        #controls the speed the sprite walks around.
-        self.scrollSpeed = 2
 
         # sets tile size
         self.tileSize = (50,50)
@@ -45,6 +35,8 @@ class Map(object):
             (x,y) = self.getLocationFromIndex(i)
             if (i == 0 or i == 1):
                 currTile = GroundTile3(x,y)
+            elif (char == "i"):
+                currTile = ItemTile(x,y,True)
             elif (char == '#'):
                 currTile = BlockingTile1(x,y)
 

@@ -99,38 +99,67 @@ def makeSomeNoise(emptyMap):
             emptyMap[row][col] = tile*offset
     return emptyMap
 
+def addItems(noisyMap):
+    itemsPlaced = 0
+    while (itemsPlaced < 5): #placing 5 items
+        (row,col) = getInts(len(noisyMap)-1)
+        if isClear(noisyMap, row, col):
+            noisyMap[row][col] = 20
+            itemsPlaced += 1
+    return noisyMap
+
+def isClear(noisyMap, row, col):
+    # makes sure there's an open space to access the item
+    (rows,cols) = (len(noisyMap),len(noisyMap[0]))
+    dirs = [
+    (-1,-1),(-1, 0),(-1,+1),
+    ( 0,-1),        ( 0,+1),
+    (+1,-1),(+1, 0),(+1,+1)
+    ]
+    for checkDir in dirs:
+        (drow,dcol) = checkDir
+        checkRow,checkCol = row+drow, col+dcol
+        checkTile = noisyMap[checkRow][checkCol]
+        if (checkTile < .5): # values for ground tiles
+            return True
+    return False
+
+
 ############################################################
 # List to string conversion
 ############################################################
 
 def getTypeStr(noisyMap):
-	(rows,cols) = (len(noisyMap),len(noisyMap[0]))
-	for row in xrange(rows):
-	    for col in xrange(cols):
-	        value = noisyMap[row][col]
-	        if (value > 1):
-	            # blocking type 1
-	            typeStr = "!"
-	        elif (value < 1 and value > .5):
-	            # blocking type 2
-	            typeStr = "#"
-	        elif (value < .5 and value >= 0):
-	            # ground type 3
-	            typeStr = "."
-	        elif (value < 0 and value > -1):
-	            # ground type 2
-	            typeStr = "-"
-	        else:
-	            # ground type 1
-	            typeStr = "+"
-	        noisyMap[row][col] = typeStr
-	return noisyMap
+    (rows,cols) = (len(noisyMap),len(noisyMap[0]))
+    for row in xrange(rows):
+        for col in xrange(cols):
+            value = noisyMap[row][col]
+            if (value == 20):
+                # item location
+                typeStr = "i"
+            elif (value > 1 and value!= 20):
+                # blocking type 1
+                typeStr = "!"
+            elif (value < 1 and value > .5):
+                # blocking type 2
+                typeStr = "#"
+            elif (value < .5 and value >= 0):
+                # ground type 3
+                typeStr = "."
+            elif (value < 0 and value > -1):
+                # ground type 2
+                typeStr = "-"
+            else:
+                # ground type 1
+                typeStr = "+"
+            noisyMap[row][col] = typeStr
+    return noisyMap
 
 def createString(maplist):
     rows = len(maplist)
     mapStr = ""
     for row in xrange(rows):
-    	mapRow = maplist[row]
+        mapRow = maplist[row]
         rowStr = ""
         for char in mapRow:
             rowStr += char
@@ -138,23 +167,24 @@ def createString(maplist):
     return mapStr
 
 def getString(dimension):
-	emptyMap = createMap(dimension)
-	noisyMap = makeSomeNoise(emptyMap) 
-	mapWithStrings = getTypeStr(noisyMap)
-	outputString = createString(mapWithStrings)
-	return outputString
+    emptyMap = createMap(dimension)
+    noisyMap = makeSomeNoise(emptyMap)
+    mapWithItems = addItems(noisyMap) 
+    mapWithStrings = getTypeStr(mapWithItems)
+    outputString = createString(mapWithStrings)
+    return outputString
 
 ############################################################
 # File Output
 ############################################################
 
 def writeMapFile(contents):
-	with open('mapfiles/tempmap', 'w') as f:
-		f.write(contents)
+    with open('mapfiles/tempmap', 'w') as f:
+        f.write(contents)
 
 def buildFile(dimension):
-	contents = getString(dimension)
-	writeMapFile(contents)
+    contents = getString(dimension)
+    writeMapFile(contents)
 
 ############################################################
 # File Reading

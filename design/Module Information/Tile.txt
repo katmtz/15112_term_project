@@ -1,0 +1,10 @@
+The Tile class defines the 6 different types of tiles
+used in the map.
+There are 2 kinds of blocking, "bad" tiles and 3 kinds
+of ground tiles that aren't used for anything. There's 
+also an item tile that changes to a ground tile when 
+the player "collects" the item.
+Each tile is a subclass of MapTile, which is just a more
+specific version of pygame.sprite.Sprite.
+The tile's image is loaded and defined within each specific tile's
+__init__ function.

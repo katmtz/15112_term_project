@@ -25,4 +25,24 @@ Term Project Timesheet
 11/24  | 5 hrs. | planned map file input/output, built functions to 
        |        | convert noise data into different tiles, set aside 
        |        | audio files for inclusion in game 
-       
+------------------------------------------------------------------------
+11/25  | 4 hrs. | redesigned entity class system to allow for better
+       |        | scrolling and map display
+--------------------------------------------------------------------------
+----                       Deliverable #2                             ----
+--------------------------------------------------------------------------
+11/26  |4.5 hrs.| map now displays with offset, finished basics of entity
+       |        | based class system
+--------------------------------------------------------------------------
+11/27  | 4 hrs. | added actual sprites and storycards, rather than just 
+       |        | placeholders, and began work on player movement/camera 
+       |        | scrolling with movement
+--------------------------------------------------------------------------
+12/02  | 2 hrs. | added more final graphics, camera/scroll debugging, 
+       |        | tile blocking debugging
+--------------------------------------------------------------------------
+12/03  | 5 hrs. | finished adding graphics, added sounds, camera/scroll
+       |        | debugging, tile blocking debugging
+--------------------------------------------------------------------------
+12/04  | 7 hrs. | minor GUI design changes, created design directory,
+       |        | final additions

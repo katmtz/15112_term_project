@@ -1,0 +1,26 @@
+Modules:
+
+- Pygame
+- MapOutput
+- Camera
+- Tile
+- Map
+- Player
+
+Pygame was used to generate graphics and run the game in general.
+
+MapOutput generates a 2D list, uses Perlin noise to create variant
+terrain, and assigns a string type based on the value returned by
+the noise function. It also saves and reloads a map file.
+
+Camera creates a rect that focuses on the part of the map that the 
+player is in.
+
+Tile defines the different kinds of tile types used as pygame sprites.
+
+Map generates a map using the file loaded by MapOutput.
+
+Player is a subclass of pygame.sprite.Sprite that represents the user
+controlled sprite. It's technically a subclass of Entity, but Entity 
+is just a wrapper with no unique features, so I excluded it from my
+explanations.

@@ -1,0 +1,25 @@
+The Camera module creates a rect around the player, that should be 
+able to update and move with the player. It should also determine
+which tiles get drawn (but that isn't happening right now). 
+
+getScrollDir() works similar to the player's update, in that it 
+changes direction booleans according to which arrow key the user
+pressed.
+
+moveRect() adjusts the rect's location based on the directional
+flag, then resets them all to False again. If the bounds check 
+returns False, it reverses the change.
+
+checkBounds() makes sure the rect is within the map dimensions. 
+
+This module was based initially on code from 
+http://stackoverflow.com/a/14357169 and https://qq.readthedocs.org/en/latest/
+but neither method could be effectively implemented in my code
+without major changes to my design. However, some influence may still
+show up, and I wanted to account for that.
+
+**Note: This function ended up not working, and at the time of
+submission I think I'm close to understanding why, but I just don't 
+have time to make any more changes. It still allows player movement, 
+but just won't show the rest of the map. Unfortunately, this leaves 
+my game pretty unplayable. :(

@@ -1,0 +1,11 @@
+I opted for simple, keyboard-based controls because I felt that
+suited the genre and overall style of my game. I noticed during
+user studies that many people expected mouse controls though, so 
+I hid the mouse in the window and left a reminder in the title 
+page that the arrow keys were used for menu navigation.
+
+I chose to have a story mode when loading the game because the 
+map takes some time to load and having a blank screen while this
+was happening seemed boring and detrimental. Using this method,
+users are still engaged while the game is being built and it adds
+context to an otherwise abstract game.

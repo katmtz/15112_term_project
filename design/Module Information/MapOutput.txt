@@ -1,0 +1,18 @@
+The MapOutput module uses noise functions adapted from pseudocode
+written by Hugo Elias to generate a map file that can be loaded
+and parsed to create a map.
+
+First, it builds an empty 2D list from given dimensions. It then
+randomizes the values in each element of the list using the
+noise function. After applying a few smoothing functions, it returns
+a "noisy map". Then, it picks 5 random locations, determines that
+these locations are not entirely surrounded by blocking tiles, and
+flags them by setting them to a value of 20. 
+Once the list is fully generated, getTypeStr(map) builds a string
+that, for each element in the list, has one placeholder character
+that corresponds to a certain range of values. There are 6 ranges 
+and 6 characters, which can be set to the different kinds of tiles
+when parsed later. 
+The string is then saved as a map file, to the directory mapfiles, 
+where it can then be accessed and loaded at any time during the 
+current game. 

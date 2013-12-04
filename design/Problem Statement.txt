@@ -1,0 +1,18 @@
+Problem:
+Design a game that will have replayability. Most RPG games are fun in
+their own right, but lack a way to re-experience the game. Once 
+you've played it through once, there's little reason to play it again.
+
+Restoration uses random map generation, so the game is never the same
+twice. Even if you find all the items once, after reloading the game,
+you have to start all over again. While the features of this game
+would need to be expanded to be a really interesting game, the basis 
+needed to do that is all built in this game.  
+
+I was most strongly influenced by the Perlin Noise Island Generator 
+(which is listed in my comparative analysis) and the indie game Yume 
+Nikki. Initially I had hoped for a richer game system, but due to 
+time, I had to pare down a lot of the features. I modeled a lot of 
+the gameplay on that of Yume Nikki, because that game has a similar
+objective to mine - collect all the items you need to achieve a 
+final goal.  
